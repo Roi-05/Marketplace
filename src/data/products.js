@@ -211,21 +211,7 @@ export const products = [
   },
 ];
 
-export const orders = [
-  {
-    id: 'NMT-20260412-001',
-    items: ['MOD007 HE Year of Dragon'],
-    total: 10169.00,
-    status: 'shipped',
-    timeline: [
-      { step: 'Order Placed', date: 'Apr 12, 2026', done: true },
-      { step: 'Processing', date: 'Apr 13, 2026', done: true },
-      { step: 'Shipped', date: 'Apr 15, 2026', done: true },
-      { step: 'Out for Delivery', date: null, done: false },
-      { step: 'Delivered', date: null, done: false },
-    ],
-  },
-];
+export const orders = [];
 
 export const filterOptions = {
   type: ['Keyboards', 'Keycaps', 'Switches'],

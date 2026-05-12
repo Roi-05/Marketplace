@@ -1,6 +1,7 @@
 import { getState, getCartTotal, clearCart } from '../store.js';
 import { formatCurrency, uid, showToast } from '../utils.js';
 import { navigate } from '../router.js';
+import { orders } from '../data/products.js';
 
 export function renderCheckout(container) {
   container.innerHTML = `
@@ -229,7 +230,24 @@ function renderReview(container) {
   `;
 
   reviewEl.querySelector('#place-order').addEventListener('click', () => {
-    const orderId = 'NMT-' + Date.now();
+    const orderId = 'NMT-' + Date.now().toString().slice(-8);
+    const { cart } = getState();
+    
+    const newOrder = {
+      id: orderId,
+      items: cart.map(item => item.product.name),
+      total: getCartTotal(),
+      status: 'processing',
+      timeline: [
+        { step: 'Order Placed', date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }), done: true },
+        { step: 'Processing', date: null, done: false },
+        { step: 'Shipped', date: null, done: false },
+        { step: 'Out for Delivery', date: null, done: false },
+        { step: 'Delivered', date: null, done: false },
+      ],
+    };
+
+    orders.unshift(newOrder); // Add to memory
     clearCart();
     showToast('Order placed successfully');
     navigate('/tracking');

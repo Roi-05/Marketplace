@@ -15,7 +15,7 @@ export function renderNavbar() {
       <!-- Desktop links -->
       <nav class="hidden md:flex items-center gap-8" aria-label="Main navigation">
         <a href="#/" class="text-xs font-medium uppercase tracking-widest hover:opacity-50 transition-opacity">Shop</a>
-        <a href="#/tracking" class="text-xs font-medium uppercase tracking-widest hover:opacity-50 transition-opacity">Track Order</a>
+        <a href="#/tracking" class="text-xs font-medium uppercase tracking-widest hover:opacity-50 transition-opacity">My Order</a>
       </nav>
 
       <!-- Right icons -->
@@ -47,7 +47,7 @@ export function renderNavbar() {
     <div id="mobile-menu" class="hidden md:hidden border-b border-brand-gray">
       <div class="flex flex-col px-6 py-4 gap-4">
         <a href="#/" class="text-xs font-medium uppercase tracking-widest">Shop</a>
-        <a href="#/tracking" class="text-xs font-medium uppercase tracking-widest">Track Order</a>
+        <a href="#/tracking" class="text-xs font-medium uppercase tracking-widest">My Order</a>
       </div>
     </div>
   `;
