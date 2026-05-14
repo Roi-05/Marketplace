@@ -87,7 +87,11 @@ export function renderProductDetail(container, { id }) {
             </div>
           </div>
 
-          <p class="text-3xl font-bold">${formatCurrency(product.price)}</p>
+          <div class="flex items-baseline gap-4">
+            <p class="text-3xl font-bold">${formatCurrency(product.price)}</p>
+            ${product.originalPrice ? `<p class="text-lg text-gray-400 line-through">${formatCurrency(product.originalPrice)}</p>` : ''}
+            ${product.originalPrice ? `<span class="text-xs font-bold text-red-600 uppercase tracking-widest">10% OFF</span>` : ''}
+          </div>
 
           <div class="space-y-6">
             ${product.layout ? `

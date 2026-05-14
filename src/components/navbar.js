@@ -6,6 +6,13 @@ export function renderNavbar() {
   if (!nav) return;
 
   nav.innerHTML = `
+    <!-- Top Promo Bar -->
+    <div class="bg-black text-white text-center py-2.5 px-6">
+      <p class="text-[10px] uppercase tracking-[0.2em] font-bold">
+        Limited Edition Sale: <span class="text-red-500">10% OFF</span> on MOD007 Year of Dragon — Today Only.
+      </p>
+    </div>
+
     <div class="flex items-center justify-between px-6 md:px-12 py-5 border-b border-brand-gray">
       <!-- Logo -->
       <a href="#/" id="nav-logo" class="flex items-center gap-3 cursor-pointer select-none">

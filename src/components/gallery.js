@@ -5,7 +5,9 @@ import { renderFilterBar } from './filterBar.js';
 import { openProductModal } from './productModal.js';
 
 export function renderGallery(container) {
-  container.innerHTML = `
+  // Append, not replace, so spotlight above is preserved
+  const wrapper = document.createElement('div');
+  wrapper.innerHTML = `
     <!-- Hero / heading -->
     <div class="px-6 md:px-12 pt-12 pb-8">
       <p class="text-[11px] uppercase tracking-[0.2em] text-gray-400 mb-3">New Collection — 2026</p>
@@ -26,9 +28,10 @@ export function renderGallery(container) {
       </div>
     </div>
   `;
+  container.appendChild(wrapper);
 
   // Render filter bar
-  const filterWrapper = container.querySelector('#filter-bar-wrapper');
+  const filterWrapper = wrapper.querySelector('#filter-bar-wrapper');
   renderFilterBar(filterWrapper, renderProducts);
 
   // Initial render
@@ -39,8 +42,8 @@ export function renderGallery(container) {
 
   function renderProducts() {
     const { filters } = getState();
-    const grid = container.querySelector('#product-grid');
-    const noResults = container.querySelector('#no-results');
+    const grid = wrapper.querySelector('#product-grid');
+    const noResults = wrapper.querySelector('#no-results');
     if (!grid) return;
 
     const filtered = products.filter(p => {

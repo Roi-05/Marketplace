@@ -5,11 +5,13 @@ import { renderGallery } from './components/gallery.js';
 import { renderProductDetail } from './components/productDetail.js';
 import { renderCheckout } from './components/checkout.js';
 import { renderOrderTracking } from './components/orderTracking.js';
+import { renderFeaturedSpotlight } from './components/featuredSpotlight.js';
 import { route, start } from './router.js';
 import { getState } from './store.js';
 
 // ── Routes ───────────────────────────────────────────────────────────
 route('/', (container) => {
+  renderFeaturedSpotlight(container);
   renderGallery(container);
 });
 

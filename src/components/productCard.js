@@ -24,7 +24,10 @@ export function renderProductCard(product, onQuickView) {
     <div class="space-y-1 px-1">
       <div class="flex items-start justify-between gap-2">
         <h2 class="text-sm font-semibold tracking-tight leading-snug">${product.name}</h2>
-        <span class="text-sm font-medium whitespace-nowrap">${formatCurrency(product.price)}</span>
+        <div class="text-right">
+          <p class="text-sm font-medium whitespace-nowrap">${formatCurrency(product.price)}</p>
+          ${product.originalPrice ? `<p class="text-[10px] text-gray-400 line-through">${formatCurrency(product.originalPrice)}</p>` : ''}
+        </div>
       </div>
       <div class="flex items-center gap-2">
         <div class="flex gap-0.5">${stars}</div>
