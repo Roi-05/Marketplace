@@ -32,6 +32,7 @@ function resolve() {
     app.classList.remove('page-enter');
     void app.offsetWidth;
     app.classList.add('page-enter');
+    window.scrollTo(0, 0);
     return;
   }
 
@@ -47,6 +48,7 @@ function resolve() {
         app.classList.remove('page-enter');
         void app.offsetWidth;
         app.classList.add('page-enter');
+        window.scrollTo(0, 0);
         return;
       }
     }
