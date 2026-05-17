@@ -80,8 +80,6 @@ export function renderGallery(container) {
       noResults.classList.add('hidden');
       displayed.forEach((product, i) => {
         const card = renderProductCard(product, openProductModal);
-        card.style.animationDelay = `${i * 60}ms`;
-        card.classList.add('page-enter');
         grid.appendChild(card);
       });
     }

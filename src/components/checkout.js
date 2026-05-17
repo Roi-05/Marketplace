@@ -183,8 +183,11 @@ export function renderCheckout(container) {
 
 function renderReview(container) {
   const { cart } = getState();
-  const total = getCartTotal();
-  const shipping = container.querySelector('#ship-fname')?.value + ' ' + container.querySelector('#ship-lname')?.value;
+  const subtotal = getCartTotal();
+  const shippingFee = subtotal >= 5000 ? 0 : 200;
+  const grandTotal = subtotal + shippingFee;
+
+  const shippingName = container.querySelector('#ship-fname')?.value + ' ' + container.querySelector('#ship-lname')?.value;
   const email = container.querySelector('#ship-email')?.value;
   const address = [
     container.querySelector('#ship-street')?.value,
@@ -208,16 +211,27 @@ function renderReview(container) {
             </div>
           `).join('')}
         </div>
-        <div class="flex justify-between text-sm font-bold pt-4 border-t border-[#F5F5F5] mt-4">
-          <span>Total</span>
-          <span>${formatCurrency(total)}</span>
+        
+        <div class="space-y-2 pt-4 border-t border-[#F5F5F5] mt-4">
+          <div class="flex justify-between text-xs text-gray-500">
+            <span>Subtotal</span>
+            <span>${formatCurrency(subtotal)}</span>
+          </div>
+          <div class="flex justify-between text-xs text-gray-500">
+            <span>Shipping</span>
+            <span>${shippingFee === 0 ? 'Free' : formatCurrency(shippingFee)}</span>
+          </div>
+          <div class="flex justify-between text-sm font-bold pt-2 border-t border-[#F5F5F5] mt-2">
+            <span>Total</span>
+            <span>${formatCurrency(grandTotal)}</span>
+          </div>
         </div>
       </div>
 
       <!-- Shipping to -->
       <div>
         <h4 class="text-[11px] uppercase tracking-widest text-gray-400 mb-2">Ship To</h4>
-        <p class="text-sm font-medium">${shipping}</p>
+        <p class="text-sm font-medium">${shippingName}</p>
         <p class="text-sm text-gray-500">${email}</p>
         <p class="text-sm text-gray-500">${address}</p>
       </div>
@@ -233,7 +247,7 @@ function renderReview(container) {
     const newOrder = {
       id: orderId,
       items: cart.map(item => item.product.name),
-      total: getCartTotal(),
+      total: grandTotal,
       status: 'processing',
       timeline: [
         { step: 'Order Placed', date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }), done: true },

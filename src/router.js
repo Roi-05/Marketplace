@@ -20,7 +20,7 @@ let currentPath = window.location.hash.slice(1) || '/';
 
 function resolve() {
   const hash = window.location.hash.slice(1) || '/';
-  
+
   // Save scroll position for the page we are leaving
   scrollPositions[currentPath] = window.scrollY;
   currentPath = hash;
@@ -39,11 +39,11 @@ function resolve() {
     app.classList.remove('page-enter');
     void app.offsetWidth;
     app.classList.add('page-enter');
-    
+
     // Restore saved scroll position or scroll to top
     const savedPos = scrollPositions[hash] || 0;
     setTimeout(() => {
-      window.scrollTo(0, savedPos);
+      window.scrollTo({ top: savedPos, behavior: 'instant' });
     }, 0); // Brief delay for DOM to calculate height
   };
 

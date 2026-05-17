@@ -15,7 +15,7 @@ export function renderNavbar() {
             <span class="text-white/20 mx-2">✦</span>
             Free Shipping on orders over ₱5,000
             <span class="text-white/20 mx-2">✦</span>
-            Authentic Akko Products
+            Authentic Keyboards, Switches, and Keycaps
             <span class="text-white/20 mx-2">✦</span>
           </span>
         `).join('')}
