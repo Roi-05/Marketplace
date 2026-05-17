@@ -5,15 +5,26 @@ import { renderFilterBar } from './filterBar.js';
 import { openProductModal } from './productModal.js';
 
 export function renderGallery(container) {
-  // Append, not replace, so spotlight above is preserved
   const wrapper = document.createElement('div');
   wrapper.innerHTML = `
-    <!-- Hero / heading -->
-    <div class="px-6 md:px-12 pt-12 pb-8">
-      <p class="text-[11px] uppercase tracking-[0.2em] text-gray-400 mb-3">New Collection — 2026</p>
-      <h1 class="text-4xl md:text-5xl font-bold tracking-tight leading-tight max-w-xl">
-        Every keystroke,<br />a statement.
-      </h1>
+    <!-- Section header -->
+    <div class="px-6 md:px-12 pt-16 pb-10">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div>
+          <p class="text-[10px] uppercase tracking-[0.25em] text-red-500 font-bold mb-3">New Collection — 2026</p>
+          <h1 class="text-4xl md:text-5xl font-black tracking-tight leading-[1.05] max-w-lg">
+            Every keystroke,<br/><span class="text-gray-300">a statement.</span>
+          </h1>
+        </div>
+        <p class="text-[11px] text-gray-400 max-w-xs leading-relaxed md:text-right">
+          Curated mechanical keyboards, switches, and keycaps for enthusiasts who demand perfection.
+        </p>
+      </div>
+    </div>
+
+    <!-- Divider -->
+    <div class="px-6 md:px-12">
+      <div class="h-px bg-[#F0F0F0]"></div>
     </div>
 
     <!-- Filter bar -->
@@ -21,23 +32,22 @@ export function renderGallery(container) {
 
     <!-- Product grid -->
     <div class="px-6 md:px-12 py-10">
-      <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12"></div>
+      <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-14"></div>
       <div id="no-results" class="hidden py-20 text-center">
-        <p class="text-sm font-medium mb-1">No products found</p>
-        <p class="text-[11px] text-gray-400">Try adjusting your filters.</p>
+        <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        </div>
+        <p class="text-sm font-bold mb-1">No products found</p>
+        <p class="text-[11px] text-gray-400">Try adjusting your filters or search term.</p>
       </div>
     </div>
   `;
   container.appendChild(wrapper);
 
-  // Render filter bar
   const filterWrapper = wrapper.querySelector('#filter-bar-wrapper');
   renderFilterBar(filterWrapper, renderProducts);
 
-  // Initial render
   renderProducts();
-
-  // Re-render on state change (filters)
   subscribe(() => renderProducts());
 
   function renderProducts() {
@@ -53,7 +63,6 @@ export function renderGallery(container) {
       return true;
     });
 
-    // Also filter by search query if any
     const searchInput = document.querySelector('#search-input');
     const query = searchInput?.value?.toLowerCase().trim();
     const displayed = query
@@ -69,14 +78,15 @@ export function renderGallery(container) {
       noResults.classList.remove('hidden');
     } else {
       noResults.classList.add('hidden');
-      displayed.forEach(product => {
+      displayed.forEach((product, i) => {
         const card = renderProductCard(product, openProductModal);
+        card.style.animationDelay = `${i * 60}ms`;
+        card.classList.add('page-enter');
         grid.appendChild(card);
       });
     }
   }
 
-  // Live search
   document.addEventListener('input', (e) => {
     if (e.target.id === 'search-input') renderProducts();
   });

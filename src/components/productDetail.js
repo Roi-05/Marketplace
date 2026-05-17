@@ -30,11 +30,13 @@ export function renderProductDetail(container, { id }) {
 
   function renderTabs() {
     return `
-      <button class="tab-btn py-4 text-[11px] uppercase tracking-[0.2em] font-bold text-gray-400 border-b-2 border-transparent transition-all hover:text-black" data-tab="details">The Details</button>
+      <button class="tab-btn py-4 text-[11px] uppercase tracking-[0.2em] font-bold text-black border-b-2 border-black transition-all" data-tab="details">The Details</button>
       <button class="tab-btn py-4 text-[11px] uppercase tracking-[0.2em] font-bold text-gray-400 border-b-2 border-transparent transition-all hover:text-black" data-tab="reviews">Ratings & Reviews <span class="ml-1 opacity-60 count-reviews">${product.reviews.length}</span></button>
-      <button class="tab-btn py-4 text-[11px] uppercase tracking-[0.2em] font-bold text-black border-b-2 border-black transition-all" data-tab="discussion">Discussion <span class="ml-1 opacity-60 count-discussions">${product.discussions.length}</span></button>
     `;
   }
+
+  const reviewCount = product.reviews ? product.reviews.length : 0;
+  const rating = reviewCount > 0 ? (product.reviews.reduce((acc, r) => acc + r.rating, 0) / reviewCount) : 0;
 
   container.innerHTML = `
     <div class="max-w-7xl mx-auto px-6 md:px-12 py-8">
@@ -82,15 +84,18 @@ export function renderProductDetail(container, { id }) {
         <div class="space-y-8">
           <div class="space-y-2">
             <h1 class="text-3xl font-bold tracking-tight">${product.name}</h1>
-            <div class="flex items-center gap-3">
-              <div class="flex gap-0.5">${renderStarDisplay(product.rating)}</div>
+            <div class="flex items-center gap-3" id="pdp-rating-container">
+              ${reviewCount > 0 
+                ? `<div class="flex gap-0.5">${renderStarDisplay(rating)}</div><span class="text-[11px] text-gray-400 ml-1">(${reviewCount} review${reviewCount > 1 ? 's' : ''})</span>` 
+                : `<span class="text-[11px] text-gray-400 italic">No reviews yet — be the first!</span>`
+              }
             </div>
           </div>
 
-          <div class="flex items-baseline gap-4">
-            <p class="text-3xl font-bold">${formatCurrency(product.price)}</p>
-            ${product.originalPrice ? `<p class="text-lg text-gray-400 line-through">${formatCurrency(product.originalPrice)}</p>` : ''}
-            ${product.originalPrice ? `<span class="text-xs font-bold text-red-600 uppercase tracking-widest">10% OFF</span>` : ''}
+          <div class="flex items-baseline gap-3 flex-wrap">
+            <p class="text-3xl font-black">${formatCurrency(product.price)}</p>
+            ${product.originalPrice ? `<p class="text-lg text-gray-400 line-through font-medium">${formatCurrency(product.originalPrice)}</p>` : ''}
+            ${product.originalPrice ? `<span class="promo-pill">10% OFF</span>` : ''}
           </div>
 
           <div class="space-y-6">
@@ -124,15 +129,15 @@ export function renderProductDetail(container, { id }) {
       </div>
 
       <!-- Tabs Section -->
-      <div class="mt-20 border-b border-[#F5F5F5]">
-        <div class="flex justify-center gap-12 md:gap-24" id="tab-header">
+      <div class="mt-20 border-b border-[#F0F0F0]">
+        <div class="flex gap-8 md:gap-12" id="tab-header">
           ${renderTabs()}
         </div>
       </div>
 
       <!-- Tab Panels -->
       <div class="py-12">
-        <div id="panel-details" class="tab-panel hidden max-w-2xl mx-auto">
+        <div id="panel-details" class="tab-panel max-w-2xl mx-auto">
           <div class="space-y-8">
             <p class="text-sm text-gray-600 leading-relaxed text-center">${product.description}</p>
             <div class="pt-4">
@@ -144,43 +149,14 @@ export function renderProductDetail(container, { id }) {
         <div id="panel-reviews" class="tab-panel hidden max-w-4xl mx-auto">
            <div id="reviews-container-tab"></div>
         </div>
-
-        <div id="panel-discussion" class="tab-panel">
-          <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
-            <div class="lg:col-span-8 space-y-8">
-              <div class="flex items-center justify-between mb-6">
-                <h2 class="text-xl font-bold tracking-tight">Discussion</h2>
-                <div class="flex items-center gap-2">
-                  <span class="text-[10px] text-gray-400 uppercase tracking-widest">Sort by</span>
-                  <select class="text-[10px] uppercase tracking-widest font-bold bg-transparent outline-none cursor-pointer">
-                    <option>Newest</option>
-                    <option>Oldest</option>
-                  </select>
-                </div>
-              </div>
-              <div id="discussion-list" class="space-y-10">
-                <div id="actual-discussion"></div>
-              </div>
-            </div>
-            
-            <div class="lg:col-span-4 space-y-10">
-              <div class="space-y-4">
-                <textarea id="reply-input" class="w-full bg-[#F9F9F9] border-none p-4 text-sm resize-none outline-none focus:ring-1 focus:ring-black transition-all" rows="4" placeholder="Enter a description"></textarea>
-                <button id="send-reply-btn" class="btn-primary w-full py-3 text-[10px] tracking-[0.2em]">Send reply</button>
-              </div>
-
-              <div class="space-y-4 pt-6 border-t border-[#F5F5F5]">
-                <textarea id="topic-input" class="w-full bg-[#F9F9F9] border-none p-4 text-sm resize-none outline-none focus:ring-1 focus:ring-black transition-all" rows="4" placeholder="Question / topic"></textarea>
-                <button id="start-discussion-btn" class="btn-secondary w-full py-3 text-[10px] tracking-[0.2em]">Start discussion</button>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
 
       <!-- Related Products -->
-      <div class="mt-24 pt-24 border-t border-[#F5F5F5]">
-        <h2 class="text-2xl font-bold tracking-tight mb-12">Related Products</h2>
+      <div class="mt-24 pt-16 border-t border-[#F0F0F0]">
+        <div class="flex items-baseline justify-between mb-10">
+          <h2 class="text-2xl font-black tracking-tight">You May Also Like</h2>
+          <a href="#/" class="text-[10px] uppercase tracking-widest font-semibold text-gray-400 hover:text-black transition-colors">View All →</a>
+        </div>
         <div id="related-products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"></div>
       </div>
     </div>
@@ -190,9 +166,18 @@ export function renderProductDetail(container, { id }) {
 
   function updateTabCounts() {
     const revCount = container.querySelector('.count-reviews');
-    const discCount = container.querySelector('.count-discussions');
     if (revCount) revCount.textContent = product.reviews.length;
-    if (discCount) discCount.textContent = product.discussions.length;
+  }
+  
+  function updateRatingDisplay() {
+    const pdpRatingContainer = container.querySelector('#pdp-rating-container');
+    const newReviewCount = product.reviews ? product.reviews.length : 0;
+    const newRating = newReviewCount > 0 ? (product.reviews.reduce((acc, r) => acc + r.rating, 0) / newReviewCount) : 0;
+    if (pdpRatingContainer) {
+      pdpRatingContainer.innerHTML = newReviewCount > 0
+        ? `<div class="flex gap-0.5">${renderStarDisplay(newRating)}</div><span class="text-[11px] text-gray-400 ml-1">(${newReviewCount} review${newReviewCount > 1 ? 's' : ''})</span>`
+        : `<span class="text-[11px] text-gray-400 italic">No reviews yet — be the first!</span>`;
+    }
   }
 
   // Carousel
@@ -223,10 +208,13 @@ export function renderProductDetail(container, { id }) {
           b.classList.toggle('border-black', isActive);
           b.classList.toggle('text-gray-400', !isActive);
           b.classList.toggle('border-transparent', !isActive);
+          b.classList.toggle('active-tab', isActive);
         });
         tabPanels.forEach(p => p.classList.toggle('hidden', p.id !== `panel-${target}`));
       });
     });
+    // Activate first tab by default
+    tabBtns[0]?.classList.add('active-tab');
   }
   initTabListeners();
 
@@ -262,88 +250,16 @@ export function renderProductDetail(container, { id }) {
     });
   }
 
-  // Discussion Logic
-  const discussionTarget = container.querySelector('#actual-discussion');
-  const replyInput = container.querySelector('#reply-input');
-  const topicInput = container.querySelector('#topic-input');
-
-  function updateDiscussion() {
-    if (discussionTarget) renderDiscussionStyle(discussionTarget, product);
-    updateTabCounts();
-  }
-
-  container.querySelector('#send-reply-btn').addEventListener('click', () => {
-    const text = replyInput.value.trim();
-    if (!text) return;
-    product.discussions.unshift({
-      id: uid(),
-      author: 'Guest User',
-      date: 'Just now',
-      text: text
-    });
-    replyInput.value = '';
-    showToast('Reply sent successfully');
-    updateDiscussion();
-  });
-
-  container.querySelector('#start-discussion-btn').addEventListener('click', () => {
-    const text = topicInput.value.trim();
-    if (!text) return;
-    product.discussions.unshift({
-      id: uid(),
-      author: 'Guest User',
-      date: 'Just now',
-      text: text
-    });
-    topicInput.value = '';
-    showToast('Discussion started successfully');
-    updateDiscussion();
-  });
-
-  updateDiscussion();
-
   // Render Related Products
   const relatedGrid = container.querySelector('#related-products-grid');
-  const related = products.filter(p => p.id !== product.id).slice(0, 4);
-  related.forEach(p => {
-    relatedGrid.appendChild(renderProductCard(p));
-  });
-
-  window.scrollTo(0, 0);
-}
-
-function renderDiscussionStyle(container, product) {
-  if (!product.discussions || product.discussions.length === 0) {
-    container.innerHTML = `<p class="text-sm text-gray-400">No discussions yet. Start one!</p>`;
-    return;
+  if (relatedGrid) {
+    const related = products.filter(p => p.id !== product.id).slice(0, 4);
+    related.forEach(p => {
+      relatedGrid.appendChild(renderProductCard(p));
+    });
   }
 
-  container.innerHTML = product.discussions.map(d => `
-    <div class="space-y-4">
-      <div class="flex gap-4">
-        <div class="w-10 h-10 rounded-full bg-gray-100 flex-shrink-0 flex items-center justify-center font-bold text-xs uppercase">
-          ${d.author.charAt(0)}
-        </div>
-        <div class="flex-1 space-y-1">
-          <div class="flex items-baseline justify-between">
-            <p class="text-sm font-bold">${d.author}</p>
-            <span class="text-[10px] text-gray-400 uppercase tracking-widest">${d.date}</span>
-          </div>
-          <p class="text-sm text-gray-600 leading-relaxed">${d.text}</p>
-          <div class="flex items-center gap-4 pt-1">
-             <button class="text-[10px] uppercase tracking-widest font-bold text-gray-400 hover:text-black transition-colors flex items-center gap-1">
-               <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 10v4h3v7h4v-7h3l1-4H7z"/></svg>
-               Like
-             </button>
-             <button class="text-[10px] uppercase tracking-widest font-bold text-gray-400 hover:text-black transition-colors flex items-center gap-1">
-               <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-               Reply
-             </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  `).join('<div class="h-px bg-[#F5F5F5] my-8"></div>');
+  window.scrollTo(0, 0);
 }
 
 function formatSpecKey(key) {

@@ -1,4 +1,4 @@
-export const products = [
+const defaultProducts = [
   // --- Keyboards ---
   {
     id: 'kbd-001',
@@ -19,12 +19,9 @@ export const products = [
       rapidTrigger: '0.01mm~2mm',
       features: 'Snap Key (SOCD), Mod-Tap, RT Stabilizer'
     },
-    rating: 5.0,
-    reviewCount: 12,
     reviews: [
       { id: 'r1', author: 'Zen L.', rating: 5, date: 'May 10, 2026', text: 'The 8K polling is noticeable in competitive games. The dragon theme is stunning.' }
-    ],
-    discussions: []
+    ]
   },
   {
     id: 'kbd-002',
@@ -44,12 +41,9 @@ export const products = [
       battery: '10,000mAh',
       connection: 'Tri-mode'
     },
-    rating: 4.9,
-    reviewCount: 8,
     reviews: [
       { id: 'r2', author: 'Sora H.', rating: 5, date: 'May 05, 2026', text: 'The LOTM artwork is beautiful. The creamy yellow switches feel amazing.' }
-    ],
-    discussions: []
+    ]
   },
   {
     id: 'kbd-003',
@@ -67,12 +61,9 @@ export const products = [
       connection: 'Tri-mode (2.4G, BT5.0, Wired)',
       stand: '3-level Ergonomic'
     },
-    rating: 4.8,
-    reviewCount: 15,
     reviews: [
       { id: 'r3', author: 'Anya F.', rating: 5, date: 'May 02, 2026', text: 'Waku waku! The keycaps are so cute and high quality.' }
-    ],
-    discussions: []
+    ]
   },
 
   // --- Keycaps ---
@@ -93,10 +84,7 @@ export const products = [
       compatibility: '60%, 64, 65, TKL, 75, 96, 1800, Full-size',
       backlight: 'Translucent Pudding'
     },
-    rating: 4.9,
-    reviewCount: 22,
-    reviews: [],
-    discussions: []
+    reviews: []
   },
   {
     id: 'kc-002',
@@ -114,10 +102,7 @@ export const products = [
       keys: '142 keys',
       compatibility: '60%, 64, 65, TKL, 75, 96, 1800, Full-size'
     },
-    rating: 4.7,
-    reviewCount: 18,
-    reviews: [],
-    discussions: []
+    reviews: []
   },
   {
     id: 'kc-003',
@@ -136,10 +121,7 @@ export const products = [
       compatibility: '60%, 64, 65, TKL, 75, 96, 1800, Full-size',
       limited: '2024 Christmas Edition'
     },
-    rating: 5.0,
-    reviewCount: 10,
-    reviews: [],
-    discussions: []
+    reviews: []
   },
 
   // --- Switches ---
@@ -161,10 +143,7 @@ export const products = [
       pins: '5-pin',
       quantity: '45 pcs'
     },
-    rating: 4.9,
-    reviewCount: 34,
-    reviews: [],
-    discussions: []
+    reviews: []
   },
   {
     id: 'sw-002',
@@ -183,10 +162,7 @@ export const products = [
       sound: 'Clean / High-pitched',
       compatibility: 'Compatible with most HE keyboards (Verify N-pole orientation)'
     },
-    rating: 4.8,
-    reviewCount: 27,
-    reviews: [],
-    discussions: []
+    reviews: []
   },
   {
     id: 'sw-003',
@@ -197,7 +173,7 @@ export const products = [
     price: 790.00,
     image: 'Akko-AstroAim-Magnetic-Switch-XQ-Q_Main.webp',
     images: ['Akko-AstroAim-Magnetic-Switch-XQ-Q_Main.webp', 'Akko-AstroAim-Magnetic-Switch-1.webp', 'Akko-AstroAim-Magnetic-Switch-2.webp'],
-    description: 'AstroAim switches deliver stable, wobble-free keystrokes for precise control. Lower-pitched sound profile compared to Astrolink, perfect for gamers who prefer quieter acoustics.',
+    description: 'AstroAim switches deliver stable, wobble-free keystrokes for precise control. Lower-pitched sound profile compared to Astrolink, perfect for gamers who prefer gamers who prefer quieter acoustics.',
     specs: {
       type: 'Magnetic (HE)',
       sound: 'Low-pitched / Quiet',
@@ -205,14 +181,23 @@ export const products = [
       stability: 'Wobble-free design',
       compatibility: 'Compatible with most HE keyboards (Verify N-pole orientation)'
     },
-    rating: 4.9,
-    reviewCount: 15,
-    reviews: [],
-    discussions: []
-  },
+    reviews: []
+  }
 ];
 
-export const orders = [];
+const savedProducts = localStorage.getItem('nmt_products');
+export const products = savedProducts ? JSON.parse(savedProducts) : defaultProducts;
+
+export function saveProducts() {
+  localStorage.setItem('nmt_products', JSON.stringify(products));
+}
+
+const savedOrders = localStorage.getItem('nmt_orders');
+export const orders = savedOrders ? JSON.parse(savedOrders) : [];
+
+export function saveOrders() {
+  localStorage.setItem('nmt_orders', JSON.stringify(orders));
+}
 
 export const filterOptions = {
   type: ['Keyboards', 'Keycaps', 'Switches'],

@@ -1,8 +1,10 @@
 /** Simple reactive store for cart & filter state */
 const listeners = new Set();
 
+const savedCart = localStorage.getItem('nmt_cart');
+
 const state = {
-  cart: [],
+  cart: savedCart ? JSON.parse(savedCart) : [],
   filters: { type: null, mounting: null, layout: null },
   cartOpen: false,
 };
@@ -17,6 +19,7 @@ export function subscribe(fn) {
 }
 
 function notify() {
+  localStorage.setItem('nmt_cart', JSON.stringify(state.cart));
   listeners.forEach((fn) => fn(state));
 }
 

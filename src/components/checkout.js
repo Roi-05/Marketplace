@@ -1,7 +1,7 @@
 import { getState, getCartTotal, clearCart } from '../store.js';
 import { formatCurrency, uid, showToast } from '../utils.js';
 import { navigate } from '../router.js';
-import { orders } from '../data/products.js';
+import { orders, saveOrders } from '../data/products.js';
 
 export function renderCheckout(container) {
   container.innerHTML = `
@@ -248,6 +248,7 @@ function renderReview(container) {
     };
 
     orders.unshift(newOrder); // Add to memory
+    saveOrders();
     clearCart();
     showToast('Order placed successfully');
     navigate('/tracking');

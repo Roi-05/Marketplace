@@ -1,5 +1,6 @@
 import { uid, escapeHtml, showToast } from '../utils.js';
 import { renderStarDisplay } from './productCard.js';
+import { saveProducts } from '../data/products.js';
 
 export function renderReviewSection(container, product, onSubmitSuccess) {
   // Use the product's actual reviews array for persistence within the session
@@ -101,6 +102,7 @@ export function renderReviewSection(container, product, onSubmitSuccess) {
       };
 
       reviews.unshift(newReview);
+      saveProducts();
       render();
 
       if (onSubmitSuccess) onSubmitSuccess();
@@ -115,15 +117,18 @@ export function renderReviewSection(container, product, onSubmitSuccess) {
 
 function renderReviewItem(review) {
   return `
-    <div class="pb-6 border-b border-[#F5F5F5] last:border-0">
-      <div class="flex items-start justify-between gap-4 mb-2">
-        <div>
-          <span class="text-sm font-semibold">${escapeHtml(review.author)}</span>
-          <span class="text-[11px] text-gray-400 ml-2">${review.date}</span>
+    <div class="review-card">
+      <div class="flex items-start justify-between gap-4 mb-3">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-xs font-bold uppercase flex-shrink-0">${review.author.charAt(0)}</div>
+          <div>
+            <span class="text-sm font-semibold block leading-tight">${escapeHtml(review.author)}</span>
+            <span class="text-[10px] text-gray-400">${review.date}</span>
+          </div>
         </div>
         <div class="flex gap-0.5 flex-shrink-0">${renderStarDisplay(review.rating)}</div>
       </div>
-      <p class="text-sm text-gray-600 leading-relaxed">${escapeHtml(review.text)}</p>
+      <p class="text-sm text-gray-600 leading-relaxed pl-11">${escapeHtml(review.text)}</p>
     </div>
   `;
 }
