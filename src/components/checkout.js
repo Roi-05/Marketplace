@@ -169,8 +169,6 @@ export function renderCheckout(container) {
     container.querySelector('#ship-error').classList.add('hidden');
     unlockedSteps.push('payment');
     openStep('payment');
-    // Scroll to payment
-    container.querySelector('#step-payment')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 
   // Payment → Review
@@ -178,7 +176,6 @@ export function renderCheckout(container) {
     unlockedSteps.push('review');
     renderReview(container);
     openStep('review');
-    container.querySelector('#step-review')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 
   openStep('shipping');
