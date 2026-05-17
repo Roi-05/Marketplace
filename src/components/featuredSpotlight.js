@@ -5,7 +5,7 @@ export function renderFeaturedSpotlight(container) {
   section.className = 'max-w-7xl mx-auto px-6 md:px-12 py-12';
   section.innerHTML = `
     <div class="relative group bg-[#0A0A0A] rounded-3xl overflow-hidden cursor-pointer h-[500px] md:h-[600px]" id="spotlight-dragon">
-      <img src="/Dragon_main.jpg" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-1000" />
+      <img src="Dragon_main.jpg" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-1000" />
       <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
       <div class="absolute bottom-10 left-10 right-10 text-center md:text-left">
         <span class="inline-block px-3 py-1 bg-red-600 text-white text-[10px] font-bold uppercase tracking-widest mb-4 rounded-full">Limited Edition Spotlight — 10% OFF</span>
