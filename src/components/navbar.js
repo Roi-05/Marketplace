@@ -9,7 +9,7 @@ export function renderNavbar() {
     <!-- Top Promo Bar -->
     <div class="bg-black text-white text-center py-2.5 px-6">
       <p class="text-[10px] uppercase tracking-[0.2em] font-bold">
-        Limited Edition Sale: <span class="text-red-500">10% OFF</span> on MOD007 Year of Dragon — Today Only.
+        Limited Edition Sale: <span class="text-red-500">10% OFF</span> on MOD007 Year of Dragon — This Month only.
       </p>
     </div>
 
