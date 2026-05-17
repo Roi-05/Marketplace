@@ -15,8 +15,16 @@ export function start() {
   resolve();
 }
 
+const scrollPositions = {};
+let currentPath = window.location.hash.slice(1) || '/';
+
 function resolve() {
   const hash = window.location.hash.slice(1) || '/';
+  
+  // Save scroll position for the page we are leaving
+  scrollPositions[currentPath] = window.scrollY;
+  currentPath = hash;
+
   const app = document.getElementById('page-content');
   if (!app) return;
 
@@ -25,14 +33,23 @@ function resolve() {
     currentCleanup = null;
   }
 
-  // Try exact match first
-  if (routes[hash]) {
+  const handleRoute = (handler, params = null) => {
     app.innerHTML = '';
-    currentCleanup = routes[hash](app) || null;
+    currentCleanup = handler(app, params) || null;
     app.classList.remove('page-enter');
     void app.offsetWidth;
     app.classList.add('page-enter');
-    window.scrollTo(0, 0);
+    
+    // Restore saved scroll position or scroll to top
+    const savedPos = scrollPositions[hash] || 0;
+    setTimeout(() => {
+      window.scrollTo(0, savedPos);
+    }, 0); // Brief delay for DOM to calculate height
+  };
+
+  // Try exact match first
+  if (routes[hash]) {
+    handleRoute(routes[hash]);
     return;
   }
 
@@ -43,12 +60,7 @@ function resolve() {
       const [, base, paramName] = paramMatch;
       if (hash.startsWith(base + '/')) {
         const paramValue = hash.slice(base.length + 1);
-        app.innerHTML = '';
-        currentCleanup = handler(app, { [paramName]: paramValue }) || null;
-        app.classList.remove('page-enter');
-        void app.offsetWidth;
-        app.classList.add('page-enter');
-        window.scrollTo(0, 0);
+        handleRoute(handler, { [paramName]: paramValue });
         return;
       }
     }
